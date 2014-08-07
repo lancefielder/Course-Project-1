@@ -1,0 +1,11 @@
+library("data.table")
+RT<-read.table("household_power_consumption.txt", header=TRUE, sep=";")
+DT<-data.table(RT)
+FixDate<-as.Date(DT$Date, format="%d/%m/%Y")
+DateTime1<-paste(DT$Date, DT$Time)
+FixDateTime<-strptime(DateTime1, format= "%d/%m/%Y %H:%M:%S")
+DT[,DateTime:=as.character(FixDateTime)]
+DT1<-subset(DT, as.Date(DateTime)>="2007-02-01 00:00:00" & as.Date(DateTime)<="2007-02-02 11:59:59")
+x<-as.POSIXlt(as.character(DT1$DateTime))
+y<-as.numeric(as.character(DT1$Global_active_power))
+plot(x,y, type="l",xlab ="", ylab="Global Active Power (kilowatts)")
